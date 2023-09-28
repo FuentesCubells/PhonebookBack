@@ -1,0 +1,25 @@
+{
+  "name": "phonebook-app-backend",
+  "version": "1.0.0",
+  "description": "Backend for a demo phonebook app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FuentesCubells/Phonebook.git"
+  },
+  "keywords": [
+    "backend",
+    "react",
+    "app",
+    "phonebook"
+  ],
+  "author": "Fuentes Cubells",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FuentesCubells/Phonebook/issues"
+  },
+  "homepage": "https://github.com/FuentesCubells/Phonebook#readme"
+}
