@@ -13,7 +13,7 @@ const getContacts = async (request, response) => {
 const addContact = async (request, response) => {
   try {
     const body = request.body;
-    const file = request.file;
+    const file = request.file ? request.file : '' 
     
     if (!body.name || !body.phone) {
       const error = {};
