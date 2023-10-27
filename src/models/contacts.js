@@ -8,8 +8,13 @@ const contactSchema = mongoose.Schema(
             maxlength: 50,
         },
         phone: {
-            type: Number,
-            match: /^\d{9}$/,
+            type: String,
+            validate: {
+                validator: function (v) {
+                    return /^\d{9}$/.test(v);
+                },
+                message: 'Enter a valid phone number',
+            },
             required: true,
         },
         email: {

@@ -14,14 +14,28 @@ const addContact = async (request, response) => {
   try {
     const body = request.body;
     const file = request.file;
-
+    
     if (!body.name || !body.phone) {
-      return response.status(400).send("The name and phone are required");
+      const error = {};
+    
+      if (!body.name) {
+        error.name = "Name is required";
+      }
+    
+      if (!body.phone) {
+        error.phone = "Phone is required";
+      }
+    
+      return response.status(400).send({ error });
     }
-   
+    
     const contactExist = await Contacts.findOne({ name: body.name });
-    const imagePath = file.path;
+    const imagePath = file.path ? file.path : ''  ;
 
+    if (request.fileValidationError) {
+      return response.status(400).send({ error: 'Upload a valid image file' });
+    }
+    
     if (contactExist) {
       return response.status(400).send({ error: "Contact already exists" });
     } else {
@@ -33,7 +47,7 @@ const addContact = async (request, response) => {
         role: body.role,
         sector: body.sector,
         city: body.city,
-        image: imagePath,
+        image: imagePath
       };
 
       const NewContact = new Contacts(contact);
@@ -42,7 +56,7 @@ const addContact = async (request, response) => {
       response.status(200).json({ message: "New Contact Added", contact });
     }
   } catch (error) {
-    console.error('Error adding contact', error)
+    console.log(error);
     response.status(500).json({ error: error.message });
   }
 };

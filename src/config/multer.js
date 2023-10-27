@@ -15,7 +15,7 @@ const fileFilter = (request, file, cb) => {
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Only specific image file types are allowed!"), false);
+    cb({ error: "Only specific image file types are allowed!" }, false);
   }
 };
 
