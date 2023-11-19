@@ -14,7 +14,6 @@ const addContact = async (request, response) => {
   try {
     const body = request.body;
     const file = request.file ? request.file : '' 
-    
     if (!body.name || !body.phone) {
       const error = {};
     
@@ -31,6 +30,7 @@ const addContact = async (request, response) => {
     
     const contactExist = await Contacts.findOne({ name: body.name });
     const imagePath = file.path ? file.path : ''  ;
+    const imageURL = imagePath.replace('public/', 'http://localhost:3001/');
 
     if (request.fileValidationError) {
       return response.status(400).send({ error: 'Upload a valid image file' });
@@ -47,7 +47,7 @@ const addContact = async (request, response) => {
         role: body.role,
         sector: body.sector,
         city: body.city,
-        image: imagePath
+        image: imageURL
       };
 
       const NewContact = new Contacts(contact);
@@ -62,47 +62,45 @@ const addContact = async (request, response) => {
 };
 
 const editContact = async (request, response) => {
-    try {
-        const body = request.body;
-        const contact = await Contacts.findOne({ name: body.name });
-        if(!contact){
-            return response.status(404).json({erro:"Contact not found"})
-        }
+  try {
+      
+      const body = request.body;
+      const file = request.file ? request.file : '';
+      const contact = await Contacts.findOne({ name: body.name });
+      
+      if (!contact) {
+          return response.status(404).json({ error: "Contact not found" });
+      }
 
-        const updateFields = {};
+      const updateFields = { ...body }; // Copy the entire request body
 
-        for (const key in body) {
-            if (body.hasOwnProperty(key)) {
-                updateFields[key] = body[key];
-            }
-        }
-        
-        const result = await Contacts.findOneAndUpdate(
-            { _id: contact._id },
-            { $set: updateFields },
-            { new: true }
-        );
-        
-        if (result) {
-            // The contact was found and updated successfully
-            response.status(200).json({ message: 'Contact updated successfully', contact: result });
-        } else {
-            // Document not found or no changes made
-            response.status(404).json({ error: 'Contact not found' });
-        }
+      if (request.file) {
+          const imagePath = request.file.path;
+          updateFields['image'] = imagePath;
+      }
 
-    } catch (error) {
-        response.status(500).json({ error: error.message });
-    }
+      const result = await Contacts.findOneAndUpdate(
+          { _id: contact._id },
+          { $set: updateFields },
+      );
+
+      if (result) {
+          response.status(200).json({ message: 'Contact updated successfully', contact: result });
+      } else {
+          response.status(404).json({ error: 'Contact not found' });
+      }
+  } catch (error) {
+      response.status(500).json({ error: error.message });
+  }
 };
 
 const deleteContact = async (request, response) => {
 
     try {
-        const body = request.body
+        const body = request.params;
         const contact = await Contacts.findOne({ name: body.name });
         if(!contact){
-            return response.status(404).json({erro:"Contact not found"})
+            return response.status(404).json({error:"Contact not found"})
         }
 
         const deletedContact = await Contacts.findByIdAndRemove(contact._id);
@@ -118,9 +116,20 @@ const deleteContact = async (request, response) => {
     }
 }
 
+const getImage = async (request, response) => {
+  try {
+    const body = request.params;
+    const contact = await Contacts.findOne({ name: body.name });
+
+    console.log(contact);
+  } catch (error) {
+    
+  }
+}
 module.exports = {
   getContacts,
   addContact,
   editContact,
   deleteContact,
+  getImage,
 };
