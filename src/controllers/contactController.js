@@ -65,18 +65,21 @@ const editContact = async (request, response) => {
   try {
       
       const body = request.body;
-      const file = request.file ? request.file : '';
-      const contact = await Contacts.findOne({ name: body.name });
       
+      const file = request.file ? request.file : '';
+      const contact = await Contacts.findOne({ _id: body.id });
+
       if (!contact) {
           return response.status(404).json({ error: "Contact not found" });
       }
+      
 
-      const updateFields = { ...body }; // Copy the entire request body
-
+      const updateFields = {...body }; // Copy the entire request body
+      
       if (request.file) {
           const imagePath = request.file.path;
-          updateFields['image'] = imagePath;
+          const imageURL = imagePath.replace('public/', 'http://localhost:3001/');
+          updateFields['image'] = imageURL;
       }
 
       const result = await Contacts.findOneAndUpdate(
@@ -98,7 +101,7 @@ const deleteContact = async (request, response) => {
 
     try {
         const body = request.params;
-        const contact = await Contacts.findOne({ name: body.name });
+        const contact = await Contacts.findOne({ _id: body.id });
         if(!contact){
             return response.status(404).json({error:"Contact not found"})
         }

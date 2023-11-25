@@ -13,16 +13,9 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Accepting all methods
   allowedHeaders: ['Content-Type'],
 }));
+
 app.use(bodyParser.json());
 
-const requestLogger = (request, response, next) => {
-  console.log('Headers', request.headers)
-  console.log('Method:', request.method)
-  console.log('Path:  ', request.path)
-  console.log('Body:  ', request.body)
-  console.log('---')
-  next()
-}
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -48,8 +41,6 @@ mongoose
     console.log("Error connecting to MongoDB:", error.message);
   });
 
-// Request Logger
-app.use(requestLogger);
 
 // Routes
 app.use("/", contactRoutes);

@@ -7,7 +7,7 @@ const upload = require('../config/multer');
 
 router.get('/', getContacts);
 router.post('/add', upload.single('image'), addContact);
-router.put('/edit/:name',upload.single('image'), editContact);
-router.delete('/delete/:name',upload.single('image'), deleteContact);
+router.put('/edit/:id', upload.single('image'), editContact);
+router.delete('/delete/:id', upload.single('image'), deleteContact);
 
 module.exports = router;
