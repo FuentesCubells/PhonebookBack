@@ -15,7 +15,7 @@ const addContact = async (request, response) => {
     const body = request.body;
     const file = request.file ? request.file : '' ;
 
-    if (!body.name || !body.phone) {
+    if (!body.name || !body.phone || body.email) {
       const error = {};
     
       if (!body.name) {
@@ -25,9 +25,18 @@ const addContact = async (request, response) => {
       if (!body.phone) {
         error.phone = "Phone is required";
       }
+
+      if(body.email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (!emailRegex.test(body.email)) {
+          error.email = "Invalid email format";
+        }
+      }
     
       return response.status(400).send({ error });
     }
+
     
     const contactExist = await Contacts.findOne({ name: body.name });
     const imagePath = file.path ? file.path : ''  ;
@@ -57,7 +66,7 @@ const addContact = async (request, response) => {
       response.status(200).json({ message: "New Contact Added", contact });
     }
   } catch (error) {
-    response.status(400).json({ error: error.message });
+    response.status(500).json({ error: error.message });
   }
 };
 

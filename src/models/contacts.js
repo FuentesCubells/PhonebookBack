@@ -19,13 +19,7 @@ const contactSchema = mongoose.Schema(
         },
         email: {
             type: String,
-            match: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-            validate: {
-                validator: function (v) {
-                  return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(v);
-                },
-                message: 'Enter a valid email address',
-              }
+            
         },
         company: {
             type: String,
