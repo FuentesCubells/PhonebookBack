@@ -57,8 +57,7 @@ const addContact = async (request, response) => {
       response.status(200).json({ message: "New Contact Added", contact });
     }
   } catch (error) {
-    console.log(error.message);
-    response.status(404).json({ error: error.message });
+    response.status(400).json({ error: error.message });
   }
 };
 
