@@ -13,7 +13,8 @@ const getContacts = async (request, response) => {
 const addContact = async (request, response) => {
   try {
     const body = request.body;
-    const file = request.file ? request.file : '' 
+    const file = request.file ? request.file : '' ;
+
     if (!body.name || !body.phone) {
       const error = {};
     
@@ -30,14 +31,14 @@ const addContact = async (request, response) => {
     
     const contactExist = await Contacts.findOne({ name: body.name });
     const imagePath = file.path ? file.path : ''  ;
-    const imageURL = imagePath.replace('public/', 'http://localhost:3001/');
+    const imageURL = imagePath.replace('public/', 'https://phonebookback-production.up.railway.app/');
 
     if (request.fileValidationError) {
       return response.status(400).send({ error: 'Upload a valid image file' });
     }
     
     if (contactExist) {
-      return response.status(400).send({ error: "Contact already exists" });
+      return response.status(400).send({ exist: "Contact already exists" });
     } else {
       const contact = {
         name: body.name,
