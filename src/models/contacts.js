@@ -9,12 +9,6 @@ const contactSchema = mongoose.Schema(
         },
         phone: {
             type: String,
-            validate: {
-                validator: function (v) {
-                    return /^\d{9}$/.test(v);
-                },
-                message: 'Enter a valid phone number',
-            },
             required: true,
         },
         email: {

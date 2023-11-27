@@ -15,7 +15,7 @@ const addContact = async (request, response) => {
     const body = request.body;
     const file = request.file ? request.file : '' ;
 
-    if (!body.name || !body.phone || body.email) {
+    if (!body.name || !body.phone || body.email || body.phone) {
       const error = {};
     
       if (!body.name) {
@@ -31,6 +31,13 @@ const addContact = async (request, response) => {
         
         if (!emailRegex.test(body.email)) {
           error.email = "Invalid email format";
+        }
+      }
+
+      if (body.phone) {
+        const phoneRegex = /^\d{9}$/;
+        if (!phoneRegex.test(body.phone)) {
+          error.phone = "Enter a valid nine-digit phone number without prefixes";
         }
       }
     
